@@ -1,65 +1,68 @@
 import './charList.scss';
-import abyss from '../../resources/img/abyss.jpg';
-import { Component } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Spinner from '../spinner/Spinner';
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../../components/errorMessage/ErrorMessage';
 
-class CharList extends Component {
+const CharList = (props) => {
     
-    state = {
-        charList: [],
-        loading: true,
-        error: false,
-        newItemLoading: false,
-        offset: 210,
-        charEnded: false,
+    const [charList, setCharList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [offset, setOffset] = useState(210);
+    const [charEnded, setCharEnded] = useState(false);
+    
+
+    const marvelService = new MarvelService();
+
+    useEffect(() => {
+        onRequest();
+    }, [])
+
+
+    const onRequest = (offset) => {
+        onCharListLoading();
+        marvelService.getAllCharacters(offset)
+        .then(onCharListLoaded)
+        .catch(onError);
     }
 
-    marvelService = new MarvelService();
-
-    componentDidMount() {
-        this.onRequest();
-    }
-
-    onRequest = (offset) => {
-        this.onCharListLoading();
-        this.marvelService.getAllCharacters(offset)
-        .then(this.onCharListLoaded)
-        .catch(this.onError);
-    }
-
-    onCharListLoading = () => {
-        this.setState({
-            newItemLoading: true,           
-        })
+    const onCharListLoading = () => {        
+            setNewItemLoading(true);        
     }
 
 
-    onCharListLoaded = (newCharList) => {
+    const onCharListLoaded = (newCharList) => {
         let ended = false;
         if (newCharList.length < 9) ended = true;
 
-        this.setState( ({offset, charList}) => ({            
-                charList: [...charList, ...newCharList] ,
-                loading: false,
-                offset: offset + 9, 
-                newItemLoading: false,   
-                charEnded: ended,        
-        }))
-        console.log(this.state.offset);
-
+        setCharList(charList => [...charList, ...newCharList]);
+        setLoading(loading => false);
+        setOffset(offset => offset + 9);
+        setNewItemLoading(newItemLoading => false);
+        setCharEnded(charEnded => ended);
     }
 
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true,
-        });
+    const onError = () => {        
+        setError(true);
+        setLoading(false);
     }
 
-    renderItems(arr) {
-        const items =  arr.map((item) => {
+    const itemRefs = useRef([]);
+
+
+
+    const focusOnItem = (id) => {
+        
+    itemRefs.current.forEach(item => item.classList.remove('char__item_selected'));
+    itemRefs.current[id].classList.add('char__item_selected');
+    itemRefs.current[id].focus();
+    }
+
+
+    function renderItems(arr) {
+        const items =  arr.map((item, i) => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit' : 'unset'};
@@ -68,14 +71,15 @@ class CharList extends Component {
             return (
                 <li 
                     className="char__item"
+                    ref={ (el) => itemRefs.current[i] = el}
                     key={item.id}
-                    onClick={ () => this.props.onCharSelected(item.id) }>
+                    onClick={ () => props.onCharSelected(item.id) }>
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                 </li>
             )
         });
-        // А эта конструкция вынесена для центровки спиннера/ошибки
+        
         return (
             <ul className="char__grid">
                 {items}
@@ -83,13 +87,8 @@ class CharList extends Component {
         )
     }
 
-
-
-    render() {
-        const {charList, loading, error, offset, newItemLoading, charEnded} = this.state;
-
-        const items = this.renderItems(charList);
-        console.log(items);
+        const items = renderItems(charList);
+        
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? items  : null;
@@ -102,47 +101,13 @@ class CharList extends Component {
             <button 
             className="button button__main button__long"
             disabled={newItemLoading}
-            onClick={() => this.onRequest(offset)}
+            onClick={() => onRequest(offset)}
             style={{'display': charEnded? 'none' : 'block'}}>
                 <div className="inner">load more</div>
             </button>
         </div>
-    )
-  }
-    
+    )    
 }
 
 export default CharList;
 
-                // <li className="char__item char__item_selected">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
-                // <li className="char__item">
-                //     <img src={abyss} alt="abyss"/>
-                //     <div className="char__name">Abyss</div>
-                // </li>
