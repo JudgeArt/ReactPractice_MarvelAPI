@@ -15,21 +15,16 @@ const CharInfo = (props) => {
     const [error, setError] = useState(false); 
 
     const marvelService = new MarvelService();
-
-    useState(() => { // componentDidMount
-        updateChar();
-    }, []);
-
+    
     useEffect(() => { //componentDidUpdate
         updateChar()
     }, [props.charId])
 
     const updateChar = () => {
-        const {charId} = this.props;
+        const {charId} = props;
         if (!charId) {
             return;
-        }
-
+    }
         onCharLoading();
         marvelService.getCharacter(charId)
         .then(onCharLoaded)
@@ -98,15 +93,6 @@ const View = ({char}) => {
         <div className="char__comics">Comics:</div>
         <ul className="char__comics-list">
             {renderComicsVal}
-            {/* {
-                comics.map((item, i) => {                   
-                    return (
-                <li key={i} className="char__comics-item">
-                    {item.name}
-                </li>
-                    )
-                })
-            } */}
         </ul>
     </>
     )
