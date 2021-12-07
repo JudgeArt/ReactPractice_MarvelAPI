@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 const CharInfo = (props) => {
 
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false); 
 
     const marvelService = new MarvelService();
@@ -34,6 +34,7 @@ const CharInfo = (props) => {
     const onCharLoaded = (char) => {
         setChar(char);
         setLoading(false);
+        setError(false);
     }
 
     const onError = () => {
