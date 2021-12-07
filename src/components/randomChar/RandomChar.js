@@ -1,6 +1,6 @@
-import { Component, useState } from 'react';
+import { Component, useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import ErrorMessage from '../../components/errorMessage/ErrorMessage';
 
 import './randomChar.scss';
@@ -13,23 +13,10 @@ import mjolnir from '../../resources/img/mjolnir.png';
 const RandomChar = () => {
 
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);    
-    
-    const marvelService = new MarvelService(); // create class which connect to API
+    const {loading, error, getCharacter, clearError} = useMarvelService(); // create hook which connect to API
 
     const onCharLoaded = (char) => { 
-        setChar(char);
-        setLoading(false);
-    }
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
-    }
-
-    const onCharLoading = () => {
-        setLoading(true);
+        setChar(char);        
     }
 
     const onBtnUpdateChar = () => {
@@ -38,15 +25,15 @@ const RandomChar = () => {
     }
 
     const updateChar = () => {
-        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        // 1009718; Wolverine
-        onCharLoading();
-        marvelService
-        .getCharacter(id)
-        .then(onCharLoaded)
-        .catch(onError);
-
+        clearError();
+        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);             
+        getCharacter(id)
+        .then(onCharLoaded);
     }
+
+    // useEffect(() => {
+    // updateChar();        
+    // })
 
     useState(() => { // componentDidMount
         updateChar();
@@ -83,7 +70,7 @@ const View = ({char}) => {
 const {name, description, thumbnail, homepage, wiki} = char;
 
     let imgStyle;
-    thumbnail.includes("image_not_available") ?  imgStyle = "contain" : imgStyle = 'cover';
+    // thumbnail.includes("image_not_available") ?  imgStyle = "contain" : imgStyle = 'cover';
 
     return (
     <div className="randomchar__block">
