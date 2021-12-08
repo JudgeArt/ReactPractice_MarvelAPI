@@ -31,9 +31,9 @@ const RandomChar = () => {
         .then(onCharLoaded);
     }
 
-    // useEffect(() => {
-    // updateChar();        
-    // })
+    useEffect(() => {
+    updateChar();        
+    }, []);
 
     useState(() => { // componentDidMount
         updateChar();
@@ -69,8 +69,10 @@ const RandomChar = () => {
 const View = ({char}) => {
 const {name, description, thumbnail, homepage, wiki} = char;
 
-    let imgStyle;
-    // thumbnail.includes("image_not_available") ?  imgStyle = "contain" : imgStyle = 'cover';
+    let imgStyle = {'objectFit' : 'cover'};
+    if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+        imgStyle = {'objectFit' : 'unset'};
+    }
 
     return (
     <div className="randomchar__block">

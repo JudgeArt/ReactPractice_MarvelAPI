@@ -5,7 +5,7 @@ import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import PropTypes from 'prop-types';
-
+import ComicsList from "../comicsList/ComicsList";
 
 import decoration from '../../resources/img/vision.png';
 
@@ -31,7 +31,8 @@ const App = () => {
                     </ErrorBoundary>
                     
                 </div>
-                <img className="bg-decoration" src={decoration} alt="vision"/>
+                {/* <ComicsList onCharSelected={onCharSelected}/> */}
+                {/* <img className="bg-decoration" src={decoration} alt="vision"/> */}
             </main>
         </div>
     )

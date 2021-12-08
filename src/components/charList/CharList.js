@@ -13,8 +13,6 @@ const CharList = (props) => {
     
     const {loading, error, getAllCharacters} = useMarvelService();
 
-    const marvelService =  useMarvelService();
-
     useEffect(() => {
         onRequest(offset, true);
     }, [])
