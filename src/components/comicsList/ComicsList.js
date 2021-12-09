@@ -53,6 +53,7 @@ const ComicsList = (props) => {
 
         return (
             <ul className="comics__grid">
+                
                 {items}
             </ul>
         )
@@ -67,7 +68,8 @@ const ComicsList = (props) => {
             {errorMessage}
             {spinner}
             {items}
-            <button className="button button__main button__long">
+            <button className="button button__main button__long"
+            onClick={() => onRequest(offset)}>
                 <div className="inner">load more</div>
             </button>    
         </div>    
