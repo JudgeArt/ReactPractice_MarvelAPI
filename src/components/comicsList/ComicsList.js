@@ -52,8 +52,7 @@ const ComicsList = (props) => {
         })
 
         return (
-            <ul className="comics__grid">
-                
+            <ul className="comics__grid">                
                 {items}
             </ul>
         )

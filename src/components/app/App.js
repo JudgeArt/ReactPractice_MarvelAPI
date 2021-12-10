@@ -8,33 +8,51 @@ import PropTypes from 'prop-types';
 import ComicsList from "../comicsList/ComicsList";
 import AppBanner from "../appBanner/AppBanner";
 
-import decoration from '../../resources/img/vision.png';
-
 const App = () => {
     
     const [selectedChar, setChar] = useState(null);
+    const [page, setPage] = useState('Char');
 
     const onCharSelected = (id) => {
         setChar(id);
     }
+
+    const onPageChoose = (page) => {
+        setPage(page);
+    }
+
+
+
+    let mainInfo;
+    if (page === 'Char') {
+        mainInfo = (
+        <>
+        <ErrorBoundary> 
+            <RandomChar/>
+        </ErrorBoundary>        
+        <div className="char__content">
+                <CharList onCharSelected={onCharSelected}/>
+                <ErrorBoundary>
+                    <CharInfo charId={selectedChar}/>
+                </ErrorBoundary>                    
+            </div>
+        </>     
+    );
+    } else {
+        mainInfo = (
+            <>
+                <AppBanner/>
+                <ComicsList onCharSelected={onCharSelected}/>   
+            </>
+        );
+    }
+
     
     return (
         <div className="app">
-            <AppHeader/>
+            <AppHeader page={page} setPage={onPageChoose}/>
             <main>
-            <ErrorBoundary> 
-                <RandomChar/>
-            </ErrorBoundary>
-                <div className="char__content">
-                    <CharList onCharSelected={onCharSelected}/>
-                    <ErrorBoundary>
-                        <CharInfo charId={selectedChar}/>
-                    </ErrorBoundary>
-                    
-                </div>
-                <AppBanner/>
-                <ComicsList onCharSelected={onCharSelected}/>
-                {/* <img className="bg-decoration" src={decoration} alt="vision"/> */}
+                {mainInfo}
             </main>
         </div>
     )
