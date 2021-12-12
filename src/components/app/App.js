@@ -21,8 +21,6 @@ const App = () => {
         setPage(page);
     }
 
-
-
     let mainInfo;
     if (page === 'Char') {
         mainInfo = (
@@ -38,7 +36,7 @@ const App = () => {
             </div>
         </>     
     );
-    } else {
+    } else if ('Comics'){
         mainInfo = (
             <>
                 <AppBanner/>
@@ -46,8 +44,6 @@ const App = () => {
             </>
         );
     }
-
-    
     return (
         <div className="app">
             <AppHeader page={page} setPage={onPageChoose}/>

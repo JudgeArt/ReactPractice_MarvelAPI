@@ -2,7 +2,6 @@ import './appHeader.scss';
 
 const AppHeader = (props) => {
 
-
     return (
         <header className="app__header">
             <h1 className="app__title">
