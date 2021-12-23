@@ -1,13 +1,12 @@
 import { useParams, Link } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
-import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
+import useMarvelService from '../../../services/MarvelService';
+import Spinner from '../../spinner/Spinner';
+import ErrorMessage from '../../errorMessage/ErrorMessage';
 import PropTypes from 'prop-types';
 
-import './singleComicPage.scss';
-import xMen from '../../resources/img/x-men.png';
+import '../signleComicPage/singleComicPage.scss';
 
 const SingleComicPage = () => {
     const {comicId} = useParams(); // hook react router, get id of comic
